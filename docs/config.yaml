@@ -379,6 +379,23 @@ proxies: # socks5
     # private-key: ./client.key # 证书对应的私钥 PEM 格式，或者私钥路径
     # ip-version: dual
 
+  # http2 (HTTP/2 CONNECT forward proxy)
+  - name: "http2"
+    type: http2
+    server: server
+    port: 443
+    # username: username
+    # password: password
+    # tls: true # 默认建议开启；若使用明文 HTTP/2（h2c）则关闭
+    # h2c: false # 明文 HTTP/2（prior knowledge），通常对应独立端口
+    # skip-cert-verify: true
+    # sni: custom.com
+    # fingerprint: xxxx # 配置指纹将实现 SSL Pining 效果, 可使用 openssl x509 -noout -fingerprint -sha256 -inform pem -in yourcert.pem 获取
+    # 下面两项如果填写则开启 mTLS（需要同时填写）
+    # certificate: ./client.crt # 证书 PEM 格式，或者 证书的路径
+    # private-key: ./client.key # 证书对应的私钥 PEM 格式，或者私钥路径
+    # ip-version: dual
+
   # Snell
   # Beware that there's currently no UDP support yet
   - name: "snell"
@@ -1326,6 +1343,24 @@ listeners:
     #   ACATwY30o/RKgD6hgeQxwrSiApLaCgU+HKh7B6SUrAHaDwBD/g0APwAAIAAgHjzK
     #   madSJjYQIf9o1N5GXjkW4DEEeb17qMxHdwMdNnwADAABAAEAAQACAAEAAwAIdGVz
     #   dC5jb20AAA==
+    #   -----END ECH KEYS-----
+
+  - name: http2-in-1
+    type: http2
+    port: 10819
+    listen: 0.0.0.0
+    # users: [] # 同 http listener
+    # h2c: false # 明文 HTTP/2（prior knowledge），与 tls/reality 不兼容
+    # 下面两项如果填写则开启 tls（需要同时填写）
+    # certificate: ./server.crt
+    # private-key: ./server.key
+    # 下面两项为mTLS配置项，如果client-auth-type设置为 "verify-if-given" 或 "require-and-verify" 则client-auth-cert必须不为空
+    # client-auth-type: ""
+    # client-auth-cert: string
+    # 如果填写则开启ech
+    # ech-key: |
+    #   -----BEGIN ECH KEYS-----
+    #   ...
     #   -----END ECH KEYS-----
 
   - name: mixed-in-1
