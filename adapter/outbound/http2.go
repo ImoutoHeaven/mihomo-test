@@ -76,7 +76,11 @@ func (h *Http2) DialContext(ctx context.Context, metadata *C.Metadata) (_ C.Conn
 		req.Header.Set("Proxy-Authorization", "Basic "+base64.StdEncoding.EncodeToString([]byte(auth)))
 	}
 
-	reqCtx, cancel := context.WithCancel(context.Background())
+	baseCtx := ctx
+	if baseCtx == nil {
+		baseCtx = context.Background()
+	}
+	reqCtx, cancel := context.WithCancel(baseCtx)
 	defer func() {
 		if err != nil {
 			cancel()
